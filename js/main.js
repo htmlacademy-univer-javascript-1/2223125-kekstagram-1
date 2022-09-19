@@ -8,3 +8,6 @@ function GenerateNumber(from, to) {
 function IsCorrectLength(checkString, maxLength) {
   return checkString <= maxLength;
 }
+
+GenerateNumber();
+IsCorrectLength();
