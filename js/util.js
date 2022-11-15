@@ -7,8 +7,8 @@ function getRandomPositiveInteger (a, b) {
   return Math.floor(result);
 }
 
-function IsCorrectLength(string, maxLength) {
+function isCorrectLength(string, maxLength) {
   return string.length <= maxLength;
 }
 
-export{getRandomPositiveInteger, IsCorrectLength};
+export{getRandomPositiveInteger, isCorrectLength};

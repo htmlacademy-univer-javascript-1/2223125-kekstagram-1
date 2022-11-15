@@ -1,8 +1,5 @@
 import {getRandomPositiveInteger} from './util.js';
 
-let id = 0;
-let url = 0;
-
 const PHOTO_DESCRIPTIONS_COUNT = 25;
 
 const DESCRIPTION = [
@@ -54,6 +51,9 @@ const NAME = [
   'Илья',
   'Андрей'
 ];
+
+let id = 0;
+let url = 0;
 
 const getId = function() {
   id += 1;
