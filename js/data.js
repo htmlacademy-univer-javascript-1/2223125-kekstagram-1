@@ -80,7 +80,7 @@ const createPhotoDescription = function() {
     url: getUrl(),
     description: DESCRIPTION[this.id - 1],
     likes: getRandomPositiveInteger(15, 200),
-    comments: createComment(),
+    comments: [createComment()],
   };
 };
 
