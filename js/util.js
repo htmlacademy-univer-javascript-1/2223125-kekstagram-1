@@ -7,7 +7,7 @@ function getRandomPositiveInteger (a, b) {
   return Math.floor(result);
 }
 
-function isCorrectLength(string, maxLength) {
+function isCorrectLength(string, maxLength = 140) {
   return string.length <= maxLength;
 }
 

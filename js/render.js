@@ -26,4 +26,4 @@ const renderPhotos = () => {
   picturesContainerElement.appendChild(newListFragment);
 };
 
-renderPhotos();
+export {renderPhotos};
