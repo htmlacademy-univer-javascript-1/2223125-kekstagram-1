@@ -1,41 +1,42 @@
+/* eslint-disable no-console */
 import {isCorrectLength} from './util.js';
 
 const body = document.querySelector('body');
 const uploadForm = document.querySelector('.img-upload__form');
-const uploadFile = uploadForm.getElementById('upload-file');
+const uploadFile = uploadForm.querySelector('#upload-file');
 const uploadOverlay = uploadForm.querySelector('.img-upload__overlay');
-const uploadPreview = uploadForm.querySelector('.img-upload__preview');
+const uploadPreview = uploadForm.querySelector('.img-upload__preview').querySelector('img');
 const imgSize = uploadOverlay.querySelector('.scale__control--value');
 const imgEffectLevel = uploadOverlay.querySelector('.effect-level__value');
 const imgHashtagsElement = uploadOverlay.querySelector('.text__hashtags');
-let imgHashtagsList = imgHashtagsElement.value.split();
 const imgCommentElement = uploadOverlay.querySelector('.text__description');
 const uploadCancelButton = uploadOverlay.querySelector('.img-upload__cancel');
-const submitButton = uploadOverlay.querySelector('.img-upload__submit');
 
 const pristine = new Pristine(uploadForm, {
-  classTo: 'form__item',
-  errorClass: 'form__item--invalid',
-  successClass: 'form__item--valid',
-  errorTextParent: 'form__item',
-  errorTextTag: 'span',
+  classTo: 'img-upload__field-wrapper',
+  errorTextParent: 'img-upload__field-wrapper',
   errorTextClass: 'form__error'
 }, false);
 
 uploadFile.addEventListener('change', () => {
   uploadOverlay.classList.remove('hidden');
   body.classList.add('modal-open');
-  uploadPreview.img.src = this.files[0].src;
+  const file = uploadFile.files[0];
+  const reader = new FileReader();
+  reader.onload = (evt) => {
+    uploadPreview.src = evt.target.result;
+  };
+  reader.readAsDataURL(file);
 
   document.addEventListener('keydown', (evt) => {
     if (evt.keyCode === 27) {
       evt.stopPropagation();
       uploadOverlay.classList.add('hidden');
       body.classList.remove('modal-open');
-      uploadPreview.img.src = 'img/upload-default-image.jpg';
+      uploadPreview.src = 'img/upload-default-image.jpg';
       imgSize.value = '55%';
       imgEffectLevel.value = '';
-      imgHashtagsList.value = '';
+      imgHashtagsElement.value = '';
       imgCommentElement.value = '';
     }
   });
@@ -44,10 +45,10 @@ uploadFile.addEventListener('change', () => {
 uploadCancelButton.addEventListener('click', () => {
   uploadOverlay.classList.add('hidden');
   body.classList.remove('modal-open');
-  uploadPreview.img.src = 'img/upload-default-image.jpg';
+  uploadPreview.src = 'img/upload-default-image.jpg';
   imgSize.value = '55%';
   imgEffectLevel.value = '';
-  imgHashtagsList = [];
+  imgHashtagsElement.value = '';
   imgCommentElement.value = '';
 
   document.removeEventListener('keydown', (evt) => {
@@ -55,10 +56,10 @@ uploadCancelButton.addEventListener('click', () => {
       evt.stopPropagation();
       uploadOverlay.classList.add('hidden');
       body.classList.remove('modal-open');
-      uploadPreview.img.src = 'img/upload-default-image.jpg';
+      uploadPreview.src = 'img/upload-default-image.jpg';
       imgSize.value = '55%';
       imgEffectLevel.value = '';
-      imgHashtagsList.value = '';
+      imgHashtagsElement.value = '';
       imgCommentElement.value = '';
     }
   });
@@ -76,19 +77,22 @@ imgCommentElement.addEventListener('keydown', (evt) => {
 });
 
 const validateHashtag = (hashtag) => {
-  const re = /^#[A-Za-zА-Яа-яЁё0-9]$/;
+  const re = /^#[A-Za-zА-Яа-яЁё0-9]{1, 19}$/;
   return re.test(hashtag);
 };
 
-pristine.addValidator(imgHashtagsList, (list) => length(list) <= 5, 'Количество хэш-тегов не должно быть больше 5');
+const IsCorrectHashtagsNumber = function(list) {
+  return  length(list) <= 5;
+};
 
-for (const hashtag of imgHashtagsList.split()) {
-  pristine.addValidator(hashtag, validateHashtag, 'Хэш-тег некорректен');
+pristine.addValidator(imgHashtagsElement, IsCorrectHashtagsNumber(imgHashtagsElement.value.split(' ')), 'Количество хэш-тегов не должно быть больше 5');
+for (const hashtag of imgHashtagsElement.value.split(' ')) {
+  pristine.addValidator(imgHashtagsElement, validateHashtag(hashtag), 'Хэш-тег некорректен');
 }
 
-pristine.addValidator(imgCommentElement.value, isCorrectLength, 'Длина комментария должна быть не больше 140 символов');
+pristine.addValidator(imgCommentElement, isCorrectLength(imgCommentElement.value), 'Длина комментария должна быть не больше 140 символов');
 
-submitButton.onclick = (evt) => {
-  evt.preventDefault();
+uploadForm.addEventListener('submit', (evt) => {
   pristine.validate();
-};
+  evt.preventDefault();
+});

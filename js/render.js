@@ -9,9 +9,10 @@ const renderPhotos = () => {
 
   for (const photoDescription of createPhotoDescriptions()) {
     const photo = pictureTemplate.cloneNode(true);
-    const image = photo.querySelector('.picture__img');
-    const likes = photo.querySelector('.picture__likes');
-    const comments = photo.querySelector('.picture__comments');
+    const photoContent = photo.content;
+    const image = photoContent.querySelector('.picture__img');
+    const likes = photoContent.querySelector('.picture__likes');
+    const comments = photoContent.querySelector('.picture__comments');
     image.src = photoDescription.url;
     likes.textContent = photoDescription.likes;
     comments.textContent = photoDescription.comments[0];

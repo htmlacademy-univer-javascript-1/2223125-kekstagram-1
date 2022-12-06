@@ -55,17 +55,17 @@ const NAME = [
 let id = 0;
 let url = 0;
 
-const getId = function() {
+const getId = function () {
   id += 1;
   return id;
 };
 
-const getUrl = function() {
+const getUrl = function () {
   url += 1;
   return `photos/${url}.jpg`;
 };
 
-const createComment = function() {
+const createComment = function () {
   return {
     id: getRandomPositiveInteger(1, 1000),
     avatar: `img/avatar-${getRandomPositiveInteger(1, 6)}.svg`,
@@ -74,15 +74,23 @@ const createComment = function() {
   };
 };
 
-const createPhotoDescription = function() {
+const createCommentList = function () {
+  const commentList = [];
+  for (let i = 0; i < 125; i++) {
+    commentList.push(createComment());
+  }
+  return commentList;
+};
+
+const createPhotoDescription = function () {
   return {
     id: getId(),
     url: getUrl(),
-    description: DESCRIPTION[this.id - 1],
+    description: DESCRIPTION[id - 1],
     likes: getRandomPositiveInteger(15, 200),
-    comments: [createComment()],
+    comments: createCommentList(),
   };
 };
 
-const createPhotoDescriptions = () => Array.from({length: PHOTO_DESCRIPTIONS_COUNT}, createPhotoDescription());
+const createPhotoDescriptions = () => Array.from({length: PHOTO_DESCRIPTIONS_COUNT}, createPhotoDescription);
 export {createPhotoDescriptions};
