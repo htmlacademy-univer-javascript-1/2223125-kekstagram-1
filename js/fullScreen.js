@@ -1,4 +1,5 @@
-/* eslint-disable no-console */
+import {getRandomPositiveInteger} from './util.js';
+
 const bigPictureSection = document.querySelector('.big-picture');
 const img = bigPictureSection.querySelector('.big-picture__img').querySelector('img');
 const likes = bigPictureSection.querySelector('.likes-count');
@@ -7,6 +8,7 @@ const commentsCount = bigPictureSection.querySelector('.comments-count');
 const commentsList = bigPictureSection.querySelector('.social__comments');
 const currentCommentsCount = bigPictureSection.querySelector('.current-comments-count');
 const loadCommentsButton = bigPictureSection.querySelector('.social__comments-loader');
+const authorAvatar = bigPictureSection.querySelector('.social__header').querySelector('img');
 
 const addComment = (photo) => {
   const currentComment = photo.comments[Number(currentCommentsCount.textContent)];
@@ -28,10 +30,15 @@ const loadFiveComments = (photo) => {
       break;
     }
   }
+  if (Number(currentCommentsCount.textContent) >= Number(commentsCount.textContent)) {
+    loadCommentsButton.classList.add('hidden');
+  }
 };
 
 const openBigPhoto = (photo) => {
   bigPictureSection.classList.remove('hidden');
+  commentsCount.textContent = photo.comments.length;
+  authorAvatar.src = `img/avatar-${getRandomPositiveInteger(1, 6)}.svg`;
 
   loadFiveComments(photo);
 
@@ -43,18 +50,24 @@ const openBigPhoto = (photo) => {
   likes.textContent = photo.likes;
   description.textContent = photo.description;
 
-  document.querySelector('body').classList.add('modal-open');
+  document.querySelector('body').classList.add('modal-open') ;
 
   const closeButton = bigPictureSection.querySelector('.big-picture__cancel');
   closeButton.addEventListener('click', () => {
     bigPictureSection.classList.add('hidden');
     document.querySelector('body').classList.remove('modal-open');
+    currentCommentsCount.textContent = 0;
+    commentsList.textContent = '';
+    loadCommentsButton.classList.remove('hidden');
   });
 
   document.addEventListener('keydown', (evt) => {
     if (evt.keyCode === 27) {
       bigPictureSection.classList.add('hidden');
       document.querySelector('body').classList.remove('modal-open');
+      currentCommentsCount.textContent = 0;
+      commentsList.textContent = '';
+      loadCommentsButton.classList.remove('hidden');
     }
   });
 };

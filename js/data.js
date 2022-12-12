@@ -74,9 +74,9 @@ const createComment = function () {
   };
 };
 
-const createCommentList = function () {
+const createCommentList = function (commentsCount) {
   const commentList = [];
-  for (let i = 0; i < 125; i++) {
+  for (let i = 0; i < commentsCount; i++) {
     commentList.push(createComment());
   }
   return commentList;
@@ -88,7 +88,7 @@ const createPhotoDescription = function () {
     url: getUrl(),
     description: DESCRIPTION[id - 1],
     likes: getRandomPositiveInteger(15, 200),
-    comments: createCommentList(),
+    comments: createCommentList(getRandomPositiveInteger(1, 100)),
   };
 };
 
