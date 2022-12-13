@@ -1,5 +1,4 @@
-/* eslint-disable no-console */
+import {renderPhotos} from './render.js';
+import './util-upload-form.js';
 
-import {createPhotoDescriptions} from './data.js';
-
-console.log(createPhotoDescriptions());
+renderPhotos();
