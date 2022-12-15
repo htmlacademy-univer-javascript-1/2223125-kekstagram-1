@@ -1,5 +1,5 @@
-/* eslint-disable no-console */
-import {isCorrectLength} from './util.js';
+import {sendData} from './api.js';
+import {isCorrectLength, showSuccessMessage, showErrorMessage} from './util.js';
 
 const EFFECTS = {
   chrome: {
@@ -85,6 +85,7 @@ const effectsList = uploadOverlay.querySelector('.effects__list');
 const sliderFieldset = uploadOverlay.querySelector('.img-upload__effect-level');
 const slider = uploadOverlay.querySelector('.effect-level__slider');
 const effectLevelElement = uploadOverlay.querySelector('.effect-level__value');
+const submitButton = uploadOverlay.querySelector('.img-upload__submit');
 let flagForSlider = true;
 
 const pristine = new Pristine(uploadForm, {
@@ -154,7 +155,6 @@ increaseImgSizeButton.addEventListener('click', () => {
 });
 
 effectsList.addEventListener('click', (evt) => {
-  console.log(uploadPreview.getAttribute('style'));
   if (flagForSlider) {
     noUiSlider.create(slider, {
       range: {
@@ -236,8 +236,35 @@ pristine.addValidator(imgHashtagsElement, validateHashtags, 'Хэш-тег не�
 pristine.addValidator(imgHashtagsElement, isThereNoRepeats, 'Хэш-теги не должны повторяться');
 pristine.addValidator(imgCommentElement, isCorrectCommentLenght, 'Длина комментария должна быть не больше 140 символов');
 
-uploadForm.addEventListener('submit', (evt) => {
-  if (!pristine.validate([imgHashtagsElement, imgCommentElement])) {
+const blockSubmitButton = () => {
+  submitButton.disabled = true;
+  submitButton.textContent = 'Публикую...';
+};
+
+const unblockSubmitButton = () => {
+  submitButton.disabled = false;
+  submitButton.textContent = 'Опубликовать';
+};
+
+const setUserFormSubmit = () => {
+  uploadForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
-  }
-});
+    if (pristine.validate([imgHashtagsElement, imgCommentElement])) {
+      blockSubmitButton();
+      sendData(
+        () => {
+          hideForm();
+          unblockSubmitButton();
+          showSuccessMessage();
+        },
+        () => {
+          showErrorMessage();
+          unblockSubmitButton();
+        },
+        new FormData(evt.target),
+      );
+    }
+  });
+};
+
+export {setUserFormSubmit, hideIfEsc};

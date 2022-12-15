@@ -1,4 +1,8 @@
 import {renderPhotos} from './render.js';
-import './util-upload-form.js';
+import {setUserFormSubmit} from './util-upload-form.js';
+import { getData } from './api.js';
+import {showAlert} from './util.js';
 
-renderPhotos();
+getData((photos) => renderPhotos(photos), showAlert);
+
+setUserFormSubmit();
