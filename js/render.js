@@ -1,11 +1,9 @@
-import {createPhotoDescriptions} from './data.js';
 import {openBigPhoto} from './fullScreen.js';
 
 const picturesContainerElement = document.querySelector('.pictures');
 const pictureTemplate = document.querySelector('#picture').content;
-const photoDescriptions = createPhotoDescriptions();
 
-const renderPhotos = () => {
+const renderPhotos = (photoDescriptions) => {
   const newListFragment = document.createDocumentFragment();
 
   for (let i = 0; i < photoDescriptions.length; i++) {
