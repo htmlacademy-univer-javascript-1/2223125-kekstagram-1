@@ -1,6 +1,8 @@
+/* eslint-disable no-console */
 import {sendData} from './api.js';
 import {isCorrectLength, showSuccessMessage, showErrorMessage} from './util.js';
 
+const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 const EFFECTS = {
   chrome: {
     filterName: 'grayscale',
@@ -122,12 +124,13 @@ uploadFile.addEventListener('change', () => {
   uploadOverlay.classList.remove('hidden');
   body.classList.add('modal-open');
   const file = uploadFile.files[0];
-  const reader = new FileReader();
-  reader.onload = (evt) => {
-    uploadPreview.src = evt.target.result;
-  };
-  reader.readAsDataURL(file);
+  const fileName = file.name.toLowerCase();
 
+  const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
+
+  if (matches) {
+    uploadPreview.src = URL.createObjectURL(file);
+  }
   document.addEventListener('keydown', hideIfEsc);
 });
 
@@ -136,7 +139,8 @@ uploadCancelButton.addEventListener('click', () => {
   document.removeEventListener('keydown', hideIfEsc);
 });
 
-decreaseImgSizeButton.addEventListener('click', () => {
+decreaseImgSizeButton.addEventListener('click', (evt) => {
+  console.log(evt);
   let imgSize = Number(imgSizeElement.value.slice(0, imgSizeElement.value.length - 1));
   if (imgSize > 25) {
     imgSize -= 25;

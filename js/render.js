@@ -1,9 +1,11 @@
+/* eslint-disable no-console */
 import {openBigPhoto} from './fullScreen.js';
 
 const picturesContainerElement = document.querySelector('.pictures');
 const pictureTemplate = document.querySelector('#picture').content;
 
 const renderPhotos = (photoDescriptions) => {
+  picturesContainerElement.querySelectorAll('.picture').forEach((picture) => picture.remove());
   const newListFragment = document.createDocumentFragment();
 
   for (let i = 0; i < photoDescriptions.length; i++) {
