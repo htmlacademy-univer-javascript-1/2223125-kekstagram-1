@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import {debounce, shuffleArray} from './util.js';
 import {renderPhotos} from './render.js';
 

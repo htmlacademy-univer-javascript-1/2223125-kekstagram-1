@@ -1,4 +1,3 @@
-/* eslint-disable no-console */
 import {sendData} from './api.js';
 import {isCorrectLength, showSuccessMessage, showErrorMessage} from './util.js';
 
@@ -139,12 +138,11 @@ uploadCancelButton.addEventListener('click', () => {
   document.removeEventListener('keydown', hideIfEsc);
 });
 
-decreaseImgSizeButton.addEventListener('click', (evt) => {
-  console.log(evt);
+decreaseImgSizeButton.addEventListener('click', () => {
   let imgSize = Number(imgSizeElement.value.slice(0, imgSizeElement.value.length - 1));
   if (imgSize > 25) {
     imgSize -= 25;
-    imgSizeElement.value = String(imgSize) + String('%');
+    imgSizeElement.value = `${imgSize}%`;
   }
   uploadPreview.style.transform = `scale(${imgSize / 100})`;
 });
@@ -153,7 +151,7 @@ increaseImgSizeButton.addEventListener('click', () => {
   let imgSize = Number(imgSizeElement.value.slice(0, imgSizeElement.value.length - 1));
   if (imgSize < 100) {
     imgSize += 25;
-    imgSizeElement.value = String(imgSize) + String('%');
+    imgSizeElement.value = `${imgSize}%`;
   }
   uploadPreview.style.transform = `scale(${imgSize / 100})`;
 });

@@ -1,10 +1,16 @@
-/* eslint-disable no-console */
-import {openBigPhoto} from './fullScreen.js';
+import {openBigPhoto} from './full-Screen.js';
 
 const picturesContainerElement = document.querySelector('.pictures');
 const pictureTemplate = document.querySelector('#picture').content;
 
 const renderPhotos = (photoDescriptions) => {
+  const openFullPhoto = (evt) => {
+    const photo = evt.target.closest('.picture');
+    if (photo) {
+      openBigPhoto(photoDescriptions[photo.dataset.index]);
+    }
+  };
+
   picturesContainerElement.querySelectorAll('.picture').forEach((picture) => picture.remove());
   const newListFragment = document.createDocumentFragment();
 
@@ -22,15 +28,8 @@ const renderPhotos = (photoDescriptions) => {
   }
 
   document.querySelector('.pictures__title').classList.remove('visually-hidden');
-
   picturesContainerElement.appendChild(newListFragment);
-
-  picturesContainerElement.addEventListener('click', (evt) => {
-    const photo = evt.target.closest('.picture');
-    if (photo) {
-      openBigPhoto(photoDescriptions[photo.dataset.index]);
-    }
-  });
+  picturesContainerElement.addEventListener('click', openFullPhoto);
 };
 
 export {renderPhotos};
