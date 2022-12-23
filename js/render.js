@@ -1,6 +1,6 @@
 import {openBigPhoto} from './full-Screen.js';
 
-const picturesContainerElement = document.querySelector('.pictures');
+const picturesContainer = document.querySelector('.pictures');
 const pictureTemplate = document.querySelector('#picture').content;
 
 const renderPhotos = (photoDescriptions) => {
@@ -11,7 +11,7 @@ const renderPhotos = (photoDescriptions) => {
     }
   };
 
-  picturesContainerElement.querySelectorAll('.picture').forEach((picture) => picture.remove());
+  picturesContainer.querySelectorAll('.picture').forEach((picture) => picture.remove());
   const newListFragment = document.createDocumentFragment();
 
   for (let i = 0; i < photoDescriptions.length; i++) {
@@ -28,8 +28,8 @@ const renderPhotos = (photoDescriptions) => {
   }
 
   document.querySelector('.pictures__title').classList.remove('visually-hidden');
-  picturesContainerElement.appendChild(newListFragment);
-  picturesContainerElement.addEventListener('click', openFullPhoto);
+  picturesContainer.appendChild(newListFragment);
+  picturesContainer.addEventListener('click', openFullPhoto);
 };
 
 export {renderPhotos};
