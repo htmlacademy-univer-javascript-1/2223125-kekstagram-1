@@ -76,16 +76,16 @@ const uploadFile = uploadForm.querySelector('#upload-file');
 const uploadOverlay = uploadForm.querySelector('.img-upload__overlay');
 const uploadPreview = uploadForm.querySelector('.img-upload__preview').querySelector('img');
 const imgEffectLevel = uploadOverlay.querySelector('.effect-level__value');
-const imgHashtagsElement = uploadOverlay.querySelector('.text__hashtags');
-const imgCommentElement = uploadOverlay.querySelector('.text__description');
+const imgHashtags = uploadOverlay.querySelector('.text__hashtags');
+const imgComment = uploadOverlay.querySelector('.text__description');
 const uploadCancelButton = uploadOverlay.querySelector('.img-upload__cancel');
 const decreaseImgSizeButton = uploadOverlay.querySelector('.scale__control--smaller');
 const increaseImgSizeButton = uploadOverlay.querySelector('.scale__control--bigger');
-const imgSizeElement = uploadOverlay.querySelector('.scale__control--value');
+const imgSize = uploadOverlay.querySelector('.scale__control--value');
 const effectsList = uploadOverlay.querySelector('.effects__list');
 const sliderFieldset = uploadOverlay.querySelector('.img-upload__effect-level');
 const slider = uploadOverlay.querySelector('.effect-level__slider');
-const effectLevelElement = uploadOverlay.querySelector('.effect-level__value');
+const effectLevel = uploadOverlay.querySelector('.effect-level__value');
 const submitButton = uploadOverlay.querySelector('.img-upload__submit');
 let flagForSlider = true;
 
@@ -96,11 +96,12 @@ const pristine = new Pristine(uploadForm, {
 });
 
 const resetForm = function() {
+  uploadFile.value = '';
   uploadPreview.src = 'img/upload-default-image.jpg';
-  imgSizeElement.value = '100%';
+  imgSize.value = '100%';
   imgEffectLevel.value = '';
-  imgHashtagsElement.value = '';
-  imgCommentElement.value = '';
+  imgHashtags.value = '';
+  imgComment.value = '';
   uploadPreview.style.transform =  'scale(1)';
   uploadPreview.style.filter = 'none';
   sliderFieldset.classList.add('hidden');
@@ -139,21 +140,21 @@ uploadCancelButton.addEventListener('click', () => {
 });
 
 decreaseImgSizeButton.addEventListener('click', () => {
-  let imgSize = Number(imgSizeElement.value.slice(0, imgSizeElement.value.length - 1));
-  if (imgSize > 25) {
-    imgSize -= 25;
-    imgSizeElement.value = `${imgSize}%`;
+  let currentImgSize = Number(imgSize.value.slice(0, imgSize.value.length - 1));
+  if (currentImgSize > 25) {
+    currentImgSize -= 25;
+    imgSize.value = `${currentImgSize}%`;
   }
-  uploadPreview.style.transform = `scale(${imgSize / 100})`;
+  uploadPreview.style.transform = `scale(${currentImgSize / 100})`;
 });
 
 increaseImgSizeButton.addEventListener('click', () => {
-  let imgSize = Number(imgSizeElement.value.slice(0, imgSizeElement.value.length - 1));
-  if (imgSize < 100) {
-    imgSize += 25;
-    imgSizeElement.value = `${imgSize}%`;
+  let currentImgSize = Number(imgSize.value.slice(0, imgSize.value.length - 1));
+  if (currentImgSize < 100) {
+    currentImgSize += 25;
+    imgSize.value = `${currentImgSize}%`;
   }
-  uploadPreview.style.transform = `scale(${imgSize / 100})`;
+  uploadPreview.style.transform = `scale(${currentImgSize / 100})`;
 });
 
 effectsList.addEventListener('click', (evt) => {
@@ -185,19 +186,19 @@ effectsList.addEventListener('click', (evt) => {
       sliderFieldset.classList.remove('hidden');
       slider.noUiSlider.updateOptions(EFFECTS[filter].settings);
       slider.noUiSlider.on('update', () => {
-        effectLevelElement.value = slider.noUiSlider.get();
-        uploadPreview.style.filter = `${EFFECTS[filter].filterName}(${effectLevelElement.value}${EFFECTS[filter].units})`;
+        effectLevel.value = slider.noUiSlider.get();
+        uploadPreview.style.filter = `${EFFECTS[filter].filterName}(${effectLevel.value}${EFFECTS[filter].units})`;
       });
     }
   }
 });
 
-imgHashtagsElement.addEventListener('keydown', (evt) => {
+imgHashtags.addEventListener('keydown', (evt) => {
   if (evt.keyCode === 27) {
     evt.stopPropagation();
   }
 });
-imgCommentElement.addEventListener('keydown', (evt) => {
+imgComment.addEventListener('keydown', (evt) => {
   if (evt.keyCode === 27) {
     evt.stopPropagation();
   }
@@ -210,7 +211,7 @@ const validateHashtag = (hashtag) => {
 
 const validateHashtags = function() {
   let flag = true;
-  for (const hashtag of imgHashtagsElement.value.split(' ')) {
+  for (const hashtag of imgHashtags.value.split(' ')) {
     if (hashtag) {
       flag = validateHashtag(hashtag);
     }
@@ -219,24 +220,24 @@ const validateHashtags = function() {
 };
 
 const isCorrectHatagsNumber = function() {
-  return imgHashtagsElement.value.split(' ').length <= 5;
+  return imgHashtags.value.split(' ').length <= 5;
 };
 
 const isThereNoRepeats = function() {
-  const hashtagsList = imgHashtagsElement.value.split(' ');
+  const hashtagsList = imgHashtags.value.split(' ');
   const hashtagsSet = new Set(hashtagsList);
   return (hashtagsList.length === hashtagsSet.size);
 };
 
 
 const isCorrectCommentLenght = function() {
-  return isCorrectLength(imgCommentElement.value);
+  return isCorrectLength(imgComment.value);
 };
 
-pristine.addValidator(imgHashtagsElement, isCorrectHatagsNumber, 'Количество хэш-тегов не должно быть больше 5');
-pristine.addValidator(imgHashtagsElement, validateHashtags, 'Хэш-тег некорректен');
-pristine.addValidator(imgHashtagsElement, isThereNoRepeats, 'Хэш-теги не должны повторяться');
-pristine.addValidator(imgCommentElement, isCorrectCommentLenght, 'Длина комментария должна быть не больше 140 символов');
+pristine.addValidator(imgHashtags, isCorrectHatagsNumber, 'Количество хэш-тегов не должно быть больше 5');
+pristine.addValidator(imgHashtags, validateHashtags, 'Хэш-тег некорректен');
+pristine.addValidator(imgHashtags, isThereNoRepeats, 'Хэш-теги не должны повторяться');
+pristine.addValidator(imgComment, isCorrectCommentLenght, 'Длина комментария должна быть не больше 140 символов');
 
 const blockSubmitButton = () => {
   submitButton.disabled = true;
@@ -251,7 +252,7 @@ const unblockSubmitButton = () => {
 const setUserFormSubmit = () => {
   uploadForm.addEventListener('submit', (evt) => {
     evt.preventDefault();
-    if (pristine.validate([imgHashtagsElement, imgCommentElement])) {
+    if (pristine.validate([imgHashtags, imgComment])) {
       blockSubmitButton();
       sendData(
         () => {
