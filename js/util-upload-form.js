@@ -104,6 +104,7 @@ const resetForm = function() {
   imgComment.value = '';
   uploadPreview.style.transform =  'scale(1)';
   uploadPreview.style.filter = 'none';
+  effectsList.querySelector('#effect-none').checked = true;
   sliderFieldset.classList.add('hidden');
 };
 
